@@ -575,15 +575,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (count > 0) {
       if (btnBulkDelete) {
-        btnBulkDelete.classList.remove("hidden");
-        btnBulkDelete.classList.add("flex");
+        btnBulkDelete.classList.remove("opacity-0", "pointer-events-none");
       }
       if (selectedCount) selectedCount.classList.remove("hidden");
       if (selectedNum) selectedNum.textContent = count;
     } else {
       if (btnBulkDelete) {
-        btnBulkDelete.classList.add("hidden");
-        btnBulkDelete.classList.remove("flex");
+        btnBulkDelete.classList.add("opacity-0", "pointer-events-none");
       }
       if (selectedCount) selectedCount.classList.add("hidden");
     }
