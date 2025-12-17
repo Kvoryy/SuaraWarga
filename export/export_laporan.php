@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config/function.php';
+require_once '../config/function.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['level'] != 'admin') {
     header("Location: index.php");
