@@ -142,12 +142,15 @@ function openDetailModal(
   laporan,
   status,
   foto,
-  lokasi
+  lokasi,
+  tanggapanData
 ) {
   const modal = document.getElementById("detailModal");
   if (!modal) return;
 
-  document.getElementById("detail_id").textContent = "#" + id;
+  const idHeader = document.getElementById("detail_id_header");
+  if (idHeader) idHeader.textContent = "#" + id;
+
   document.getElementById("detail_tanggal").textContent = tanggal;
   document.getElementById("detail_pelapor").textContent = pelapor;
   document.getElementById("detail_email").textContent = email;
@@ -171,7 +174,7 @@ function openDetailModal(
   }
   document.getElementById("detail_status_badge").textContent = statusText;
   document.getElementById("detail_status_badge").className =
-    "status-badge " + statusClass;
+    "status-badge px-2 py-1 text-xs rounded-full " + statusClass;
 
   const lokasiContainer = document.getElementById("detail_lokasi_container");
   const lokasiText = document.getElementById("detail_lokasi_text");
@@ -191,8 +194,63 @@ function openDetailModal(
     if (fotoContainer) fotoContainer.style.display = "none";
   }
 
+  // Render tanggapan langsung dari data yang diterima
+  const tanggapanList = document.getElementById("detail_tanggapan_list");
+  const noTanggapan = document.getElementById("detail_no_tanggapan");
+
+  if (tanggapanList) tanggapanList.innerHTML = "";
+
+  if (tanggapanData && tanggapanData.length > 0) {
+    if (noTanggapan) noTanggapan.style.display = "none";
+
+    tanggapanData.forEach((item) => {
+      const levelClass =
+        item.level === "admin"
+          ? "bg-purple-100 text-purple-800"
+          : "bg-blue-100 text-blue-800";
+
+      const tanggapanItem = document.createElement("div");
+      tanggapanItem.className =
+        "p-4 bg-gray-50 rounded-lg border-l-4 border-blue-500";
+      tanggapanItem.innerHTML = `
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center">
+            <div class="bg-gray-200 p-1.5 rounded-full mr-2">
+              <svg class="w-3 h-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+            </div>
+            <span class="text-sm font-medium text-gray-900">${
+              item.petugas
+            }</span>
+            <span class="ml-2 px-2 py-0.5 text-xs rounded-full ${levelClass}">${
+        item.level.charAt(0).toUpperCase() + item.level.slice(1)
+      }</span>
+          </div>
+          <span class="text-xs text-gray-500">${item.tanggal}</span>
+        </div>
+        <p class="text-sm text-gray-700">${item.isi}</p>
+      `;
+      tanggapanList.appendChild(tanggapanItem);
+    });
+  } else {
+    if (noTanggapan) noTanggapan.style.display = "block";
+  }
+
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
+}
+
+function formatTanggal(dateStr) {
+  const date = new Date(dateStr);
+  const options = {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  };
+  return date.toLocaleDateString("id-ID", options);
 }
 
 function closeDetailModal() {

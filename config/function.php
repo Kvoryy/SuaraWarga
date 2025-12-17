@@ -1,6 +1,9 @@
 <?php
 require_once 'koneksi.php';
 
+// Set timezone untuk seluruh aplikasi
+date_default_timezone_set('Asia/Makassar');
+
 function validateEmail($email) {
     return filter_var($email, FILTER_VALIDATE_EMAIL);
 }

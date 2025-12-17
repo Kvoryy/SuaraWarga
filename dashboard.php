@@ -47,7 +47,6 @@ $user_data = mysqli_fetch_assoc($result_user);
                     </div>
                     <div>
                         <?php 
-                        date_default_timezone_set('Asia/Makassar');
                         $hari = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
                         $bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
                         $namaHari = $hari[date('w')];

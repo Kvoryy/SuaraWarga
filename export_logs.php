@@ -7,8 +7,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['level'] != 'admin') {
     exit();
 }
 
-date_default_timezone_set('Asia/Makassar');
-
 $filter_type = isset($_GET['type']) ? $_GET['type'] : 'semua';
 $filter_date = isset($_GET['date']) ? $_GET['date'] : '';
 

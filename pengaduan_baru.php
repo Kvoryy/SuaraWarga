@@ -2,7 +2,6 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-date_default_timezone_set('Asia/Makassar');
 require_once 'config/function.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['level'] != 'masyarakat') {

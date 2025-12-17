@@ -17,8 +17,6 @@ $user_email = $_SESSION['email'];
 $success = '';
 $error = '';
 
-date_default_timezone_set('Asia/Makassar');
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['tambah_tanggapan'])) {
     $id_pengaduan = mysqli_real_escape_string($conn, $_POST['id_pengaduan']);
     $tanggapan = mysqli_real_escape_string($conn, $_POST['tanggapan']);
@@ -374,6 +372,8 @@ $stats = mysqli_fetch_assoc($stats_result);
                     <tbody class="bg-white divide-y divide-gray-200">
                         <?php while ($row = mysqli_fetch_assoc($result)): 
                             $id_pengaduan = $row['id_pengaduan'];
+                            
+                            // Ambil tanggapan terakhir untuk preview
                             $query_tanggapan = "SELECT t.*, u.nama as petugas_nama 
                                                 FROM tanggapan t 
                                                 JOIN users u ON t.id_petugas = u.id 
@@ -382,6 +382,25 @@ $stats = mysqli_fetch_assoc($stats_result);
                                                 LIMIT 1";
                             $result_tanggapan = mysqli_query($conn, $query_tanggapan);
                             $tanggapan_terakhir = mysqli_fetch_assoc($result_tanggapan);
+                            
+                            // Ambil semua tanggapan untuk modal detail
+                            $query_all_tanggapan = "SELECT t.*, u.nama as petugas_nama, u.level as petugas_level 
+                                                FROM tanggapan t 
+                                                JOIN users u ON t.id_petugas = u.id 
+                                                WHERE t.id_pengaduan = $id_pengaduan 
+                                                ORDER BY t.tanggal_tanggapan ASC";
+                            $result_all_tanggapan = mysqli_query($conn, $query_all_tanggapan);
+                            $all_tanggapan = [];
+                            while ($tg = mysqli_fetch_assoc($result_all_tanggapan)) {
+                                $tgl_formatted = date('d M Y, H:i', strtotime($tg['tanggal_tanggapan']));
+                                $all_tanggapan[] = [
+                                    'tanggal' => $tgl_formatted,
+                                    'isi' => $tg['tanggapan'],
+                                    'petugas' => $tg['petugas_nama'],
+                                    'level' => $tg['petugas_level']
+                                ];
+                            }
+                            $tanggapan_json = htmlspecialchars(json_encode($all_tanggapan), ENT_QUOTES, 'UTF-8');
                         ?>
                         <tr>
                             <td class="px-4 py-4">
@@ -440,16 +459,17 @@ $stats = mysqli_fetch_assoc($stats_result);
                                 <?php endif; ?>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button type="button" onclick="openDetailModal(
+                                <button type="button" onclick='openDetailModal(
                                     <?php echo $row['id_pengaduan']; ?>,
-                                    '<?php echo date('d F Y', strtotime($row['tanggal_pengaduan'])); ?>',
-                                    '<?php echo addslashes($row['pelapor_nama']); ?>',
-                                    '<?php echo addslashes($row['pelapor_email']); ?>',
-                                    '<?php echo addslashes($row['isi_laporan']); ?>',
-                                    '<?php echo $row['status']; ?>',
-                                    '<?php echo $row['foto'] ? addslashes($row['foto']) : ''; ?>',
-                                    '<?php echo addslashes($row['lokasi'] ?? ''); ?>'
-                                )" class="text-blue-600 hover:text-blue-900 mr-3">Detail</button>
+                                    "<?php echo date('d F Y', strtotime($row['tanggal_pengaduan'])); ?>",
+                                    "<?php echo addslashes($row['pelapor_nama']); ?>",
+                                    "<?php echo addslashes($row['pelapor_email']); ?>",
+                                    "<?php echo addslashes($row['isi_laporan']); ?>",
+                                    "<?php echo $row['status']; ?>",
+                                    "<?php echo $row['foto'] ? addslashes($row['foto']) : ''; ?>",
+                                    "<?php echo addslashes($row['lokasi'] ?? ''); ?>",
+                                    <?php echo $tanggapan_json; ?>
+                                )' class="text-blue-600 hover:text-blue-900 mr-3">Detail</button>
                                 
                                 <button type="button" onclick="openTanggapanModal(<?php echo $row['id_pengaduan']; ?>, '<?php echo $row['status']; ?>')" 
                                         class="text-green-600 hover:text-green-900 mr-3">Tanggapi</button>
@@ -485,10 +505,20 @@ $stats = mysqli_fetch_assoc($stats_result);
     
     <!-- Detail Modal -->
     <div id="detailModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 700px;">
             <div class="border-b border-gray-200 px-6 py-4">
                 <div class="flex justify-between items-center">
-                    <h3 class="text-lg font-semibold text-gray-900">Detail Pengaduan</h3>
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">Detail Pengaduan</h3>
+                            <p class="text-sm text-gray-500" id="detail_id_header">#</p>
+                        </div>
+                    </div>
                     <button onclick="closeDetailModal()" class="text-gray-400 hover:text-gray-500">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -497,61 +527,82 @@ $stats = mysqli_fetch_assoc($stats_result);
                 </div>
             </div>
             
-            <div class="px-6 py-6">
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">ID Pengaduan</label>
-                        <div class="text-sm font-medium text-gray-900" id="detail_id"></div>
+            <div class="px-6 py-6 max-h-[70vh] overflow-y-auto">
+                <!-- Info Grid -->
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-xs text-gray-500 mb-1">Tanggal Laporan</p>
+                        <p class="text-sm font-medium text-gray-900" id="detail_tanggal"></p>
                     </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Tanggal</label>
-                        <div class="text-sm text-gray-900" id="detail_tanggal"></div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <p class="text-xs text-gray-500 mb-1">Status</p>
+                        <span id="detail_status_badge" class="status-badge"></span>
                     </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Pelapor</label>
-                        <div class="text-sm font-medium text-gray-900" id="detail_pelapor"></div>
-                        <div class="text-sm text-gray-500" id="detail_email"></div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Status</label>
-                        <div class="text-sm">
-                            <span id="detail_status_badge" class="status-badge"></span>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Isi Laporan</label>
-                        <div class="text-sm text-gray-900 bg-gray-50 p-4 rounded-lg whitespace-pre-line" id="detail_laporan"></div>
-                    </div>
-                    
-                    <div id="detail_lokasi_container">
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Lokasi Kejadian</label>
-                        <div class="text-sm text-gray-900 flex items-center" id="detail_lokasi">
-                            <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </div>
+                
+                <!-- Pelapor Info -->
+                <div class="mb-6 p-4 border border-gray-200 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="bg-gray-100 p-2 rounded-full mr-3">
+                            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                             </svg>
-                            <span id="detail_lokasi_text"></span>
                         </div>
-                    </div>
-                    
-                    <div id="detail_foto_container" style="display: none;">
-                        <label class="block text-sm font-medium text-gray-500 mb-1">Foto</label>
-                        <div class="mt-2">
-                            <img id="detail_foto" src="" alt="Foto Pengaduan" class="max-w-full h-auto rounded-lg border border-gray-200">
+                        <div>
+                            <p class="text-sm font-medium text-gray-900" id="detail_pelapor"></p>
+                            <p class="text-xs text-gray-500" id="detail_email"></p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="mt-6 pt-6 border-t border-gray-200">
-                    <button type="button" onclick="closeDetailModal()"
-                            class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
-                        Tutup
-                    </button>
+                <!-- Isi Laporan -->
+                <div class="mb-6">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Isi Laporan</h4>
+                    <div class="text-sm text-gray-900 bg-gray-50 p-4 rounded-lg whitespace-pre-line" id="detail_laporan"></div>
                 </div>
+                
+                <!-- Lokasi -->
+                <div id="detail_lokasi_container" class="mb-6">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Lokasi Kejadian</h4>
+                    <div class="flex items-center text-sm text-gray-900 bg-blue-50 p-3 rounded-lg">
+                        <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span id="detail_lokasi_text"></span>
+                    </div>
+                </div>
+                
+                <!-- Foto -->
+                <div id="detail_foto_container" class="mb-6" style="display: none;">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Foto Dokumentasi</h4>
+                    <div class="mt-2">
+                        <img id="detail_foto" src="" alt="Foto Pengaduan" class="max-w-full h-auto rounded-lg border border-gray-200">
+                    </div>
+                </div>
+                
+                <!-- Riwayat Tanggapan -->
+                <div id="detail_tanggapan_container">
+                    <h4 class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                        <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                        </svg>
+                        Riwayat Tanggapan
+                    </h4>
+                    <div id="detail_tanggapan_list" class="space-y-3">
+                        <!-- Tanggapan akan dimuat di sini via JavaScript -->
+                    </div>
+                    <div id="detail_no_tanggapan" class="text-sm text-gray-500 text-center py-4 bg-gray-50 rounded-lg">
+                        Belum ada tanggapan
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 px-6 py-4">
+                <button type="button" onclick="closeDetailModal()"
+                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                    Tutup
+                </button>
             </div>
         </div>
     </div>

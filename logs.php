@@ -14,8 +14,6 @@ $user_nama = $_SESSION['nama'];
 $user_level = $_SESSION['level'];
 $user_email = $_SESSION['email'];
 
-date_default_timezone_set('Asia/Makassar');
-
 $filter_type = isset($_GET['type']) ? $_GET['type'] : 'semua';
 $filter_date = isset($_GET['date']) ? $_GET['date'] : '';
 
@@ -288,12 +286,17 @@ $user_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users WHERE
                             break;
                     }
                     
+                    
                     $waktu = strtotime($activity['waktu']);
-                    $waktu_formatted = date('d M Y', $waktu);
+                    $waktu_formatted = date('d M Y, H:i', $waktu);
                     $waktu_relative = '';
                     
-                    $diff = time() - $waktu;
-                    if ($diff < 60) {
+                    $now = time();
+                    $diff = $now - $waktu;
+                    
+                    if ($diff < 0) {
+                        $waktu_relative = $waktu_formatted;
+                    } elseif ($diff < 60) {
                         $waktu_relative = 'Baru saja';
                     } elseif ($diff < 3600) {
                         $waktu_relative = floor($diff / 60) . ' menit lalu';
