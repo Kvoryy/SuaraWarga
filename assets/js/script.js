@@ -194,7 +194,6 @@ function openDetailModal(
     if (fotoContainer) fotoContainer.style.display = "none";
   }
 
-  // Render tanggapan langsung dari data yang diterima
   const tanggapanList = document.getElementById("detail_tanggapan_list");
   const noTanggapan = document.getElementById("detail_no_tanggapan");
 
