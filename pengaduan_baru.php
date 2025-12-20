@@ -27,12 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['ajukan_pengaduan'])) {
         $error = "Isi laporan tidak boleh kosong";
     } else {
         $foto = '';
-        if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
+        if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0 && $_FILES['foto']['size'] > 0) {
             $upload_result = uploadFoto($_FILES['foto']);
             if ($upload_result['success']) {
                 $foto = $upload_result['filename'];
             } else {
-                // Lanjut
+                $error = $upload_result['message'];
             }
         }
         

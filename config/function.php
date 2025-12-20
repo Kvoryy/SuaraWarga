@@ -22,7 +22,10 @@ function uploadFoto($file) {
     
     $target_dir = UPLOAD_PATH;
     
-    $filename = uniqid() . '_' . basename($file["name"]);
+    // Sanitize filename - remove special characters
+    $original_name = basename($file["name"]);
+    $clean_name = preg_replace('/[^a-zA-Z0-9_\-\.]/', '', $original_name);
+    $filename = uniqid() . '_' . $clean_name;
     $target_file = $target_dir . $filename;
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
     

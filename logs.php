@@ -122,6 +122,8 @@ $total_tanggapan = mysqli_num_rows(mysqli_query($conn, "SELECT id_tanggapan FROM
 $today = date('Y-m-d');
 $pengaduan_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id_pengaduan FROM pengaduan WHERE tanggal_pengaduan = '$today'"));
 $user_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users WHERE DATE(created_at) = '$today'"));
+$tanggapan_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id_tanggapan FROM tanggapan WHERE tanggal_tanggapan = '$today'"));
+$aktivitas_hari_ini = $pengaduan_hari_ini + $user_hari_ini + $tanggapan_hari_ini;
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -176,8 +178,8 @@ $user_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users WHERE
                         <p class="text-2xl font-bold text-gray-900"><?php echo $total_users; ?></p>
                         <p class="text-xs text-green-600 mt-1">+<?php echo $user_hari_ini; ?> hari ini</p>
                     </div>
-                    <div class="bg-green-50 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
                     </div>
@@ -189,9 +191,10 @@ $user_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users WHERE
                     <div>
                         <p class="text-sm text-gray-500 mb-1">Total Tanggapan</p>
                         <p class="text-2xl font-bold text-gray-900"><?php echo $total_tanggapan; ?></p>
+                        <p class="text-xs text-green-600 mt-1">+<?php echo $tanggapan_hari_ini; ?> hari ini</p>
                     </div>
-                    <div class="bg-purple-50 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
                         </svg>
                     </div>
@@ -203,9 +206,10 @@ $user_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users WHERE
                     <div>
                         <p class="text-sm text-gray-500 mb-1">Total Aktivitas</p>
                         <p class="text-2xl font-bold text-gray-900"><?php echo count($activities); ?></p>
+                        <p class="text-xs text-green-600 mt-1">+<?php echo $aktivitas_hari_ini; ?> hari ini</p>
                     </div>
-                    <div class="bg-orange-50 p-3 rounded-lg">
-                        <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
                         </svg>
                     </div>

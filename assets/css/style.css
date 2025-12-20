@@ -76,16 +76,12 @@ body.offcanvas-open {
 }
 
 body.modal-open {
-  overflow-y: scroll;
+  overflow: hidden !important;
+  padding-right: 10px;
 }
 
-body.modal-open::-webkit-scrollbar {
-  display: none;
-}
-
-body.modal-open {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+html.modal-open {
+  overflow: hidden !important;
 }
 
 .offcanvas.active {
