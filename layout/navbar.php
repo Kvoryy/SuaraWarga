@@ -86,6 +86,19 @@ if (!isset($user_level)) {
                     <span>Pengaduan Saya</span>
                 </a>
             <?php endif; ?>
+            
+            <!-- Dark Mode Toggle -->
+            <div class="flex items-center justify-between px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition cursor-pointer" onclick="toggleDarkMode()">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                    <span>Dark Mode</span>
+                </div>
+                <div id="darkModeToggle" style="display:inline-block;position:relative;width:44px;min-width:44px;height:24px;background-color:#d1d5db;border-radius:9999px;flex-shrink:0;">
+                    <span id="darkModeKnob" style="position:absolute;top:2px;left:2px;width:20px;height:20px;background-color:white;border-radius:50%;transition:transform 0.3s;box-shadow:0 1px 3px rgba(0,0,0,0.2);"></span>
+                </div>
+            </div>
         </div>
     </div>
     

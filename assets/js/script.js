@@ -1,3 +1,44 @@
+function initDarkMode() {
+  const savedTheme = localStorage.getItem("theme");
+  const toggle = document.getElementById("darkModeToggle");
+  const knob = document.getElementById("darkModeKnob");
+
+  console.log("initDarkMode called, savedTheme:", savedTheme);
+
+  if (savedTheme === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+    if (toggle) toggle.style.backgroundColor = "#3b82f6";
+    if (knob) knob.style.transform = "translateX(20px)";
+  }
+}
+
+function toggleDarkMode() {
+  const html = document.documentElement;
+  const toggle = document.getElementById("darkModeToggle");
+  const knob = document.getElementById("darkModeKnob");
+  const isDark = html.getAttribute("data-theme") === "dark";
+
+  console.log("toggleDarkMode called, isDark:", isDark);
+
+  if (isDark) {
+    html.removeAttribute("data-theme");
+    localStorage.setItem("theme", "light");
+    if (toggle) toggle.style.backgroundColor = "#d1d5db";
+    if (knob) knob.style.transform = "translateX(0)";
+  } else {
+    html.setAttribute("data-theme", "dark");
+    localStorage.setItem("theme", "dark");
+    if (toggle) toggle.style.backgroundColor = "#3b82f6";
+    if (knob) knob.style.transform = "translateX(20px)";
+  }
+
+  console.log("data-theme is now:", html.getAttribute("data-theme"));
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  initDarkMode();
+});
+
 function openOffcanvas() {
   const offcanvas = document.getElementById("offcanvasMenu");
   const overlay = document.getElementById("offcanvasOverlay");
