@@ -122,7 +122,7 @@ $total_tanggapan = mysqli_num_rows(mysqli_query($conn, "SELECT id_tanggapan FROM
 $today = date('Y-m-d');
 $pengaduan_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id_pengaduan FROM pengaduan WHERE tanggal_pengaduan = '$today'"));
 $user_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users WHERE DATE(created_at) = '$today'"));
-$tanggapan_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id_tanggapan FROM tanggapan WHERE tanggal_tanggapan = '$today'"));
+$tanggapan_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id_tanggapan FROM tanggapan WHERE DATE(tanggal_tanggapan) = '$today'"));
 $aktivitas_hari_ini = $pengaduan_hari_ini + $user_hari_ini + $tanggapan_hari_ini;
 ?>
 <!DOCTYPE html>
