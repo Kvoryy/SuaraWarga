@@ -45,7 +45,7 @@ function openOffcanvas() {
   if (offcanvas && overlay) {
     offcanvas.classList.add("active");
     overlay.classList.add("active");
-    document.body.style.overflow = "hidden";
+    document.body.classList.add("offcanvas-open");
   }
 }
 
@@ -55,7 +55,7 @@ function closeOffcanvas() {
   if (offcanvas && overlay) {
     offcanvas.classList.remove("active");
     overlay.classList.remove("active");
-    document.body.style.overflow = "auto";
+    document.body.classList.remove("offcanvas-open");
   }
 }
 

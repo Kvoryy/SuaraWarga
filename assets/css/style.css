@@ -63,6 +63,16 @@ body {
   z-index: 1100;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+}
+
+html {
+  overflow-y: scroll;
+}
+
+body.offcanvas-open {
+  overflow: hidden;
+  padding-right: 0 !important;
 }
 
 .offcanvas.active {
@@ -413,19 +423,31 @@ body {
   color: #f6e05e !important;
 }
 
-/* Scrollbar Dark Mode */
-[data-theme="dark"] ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Scrollbar Styling - Konsisten untuk light dan dark mode */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 
 [data-theme="dark"] ::-webkit-scrollbar-track {
-  background: #1e1e1e;
+  background: #252423;
 }
 
 [data-theme="dark"] ::-webkit-scrollbar-thumb {
   background: #4a4a4a;
-  border-radius: 4px;
 }
 
 [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {

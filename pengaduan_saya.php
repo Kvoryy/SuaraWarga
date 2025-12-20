@@ -64,6 +64,7 @@ $pengaduan_list = array_reverse($pengaduan_list);
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <script>if(localStorage.getItem('theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuaraWarga</title>
@@ -322,6 +323,6 @@ $pengaduan_list = array_reverse($pengaduan_list);
         </div>
     </div>
     
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/script.js?v=<?php echo time(); ?>"></script>
 </body>
 </html>

@@ -6,7 +6,11 @@ session_start();
 <head>
   <meta charset="UTF-8">
   <title>SuaraWarga</title>
-
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
@@ -56,7 +60,7 @@ session_start();
 
   <!-- AOS -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="assets/js/script.js"></script>
+  <script src="assets/js/script.js?v=<?php echo time(); ?>"></script>
 
 </body>
 </html>

@@ -126,6 +126,7 @@ $user_hari_ini = mysqli_num_rows(mysqli_query($conn, "SELECT id FROM users WHERE
 <!DOCTYPE html>
 <html lang="id">
 <head>
+  <script>if(localStorage.getItem('theme')==='dark'){document.documentElement.setAttribute('data-theme','dark');}</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SuaraWarga</title>
