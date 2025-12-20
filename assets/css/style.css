@@ -75,6 +75,16 @@ body.offcanvas-open {
   padding-right: 0 !important;
 }
 
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
+html.modal-open {
+  overflow: hidden;
+}
+
 .offcanvas.active {
   right: 0;
 }
@@ -169,19 +179,19 @@ body.offcanvas-open {
 }
 
 [data-theme="dark"] {
-  --bg-primary: #1a1918;
-  --bg-secondary: #252423;
-  --bg-tertiary: #2f2e2d;
-  --text-primary: #f5f5f5;
-  --text-secondary: #b3b3b3;
-  --text-muted: #808080;
-  --border-color: #3d3c3b;
-  --border-color-light: #333333;
-  --nav-bg: #252423;
-  --card-bg: #252423;
-  --hover-bg: #3d3c3b;
-  --accent-bg: #1a365d;
-  --accent-text: #63b3ed;
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --text-primary: #c9d1d9;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --border-color: #30363d;
+  --border-color-light: #21262d;
+  --nav-bg: #161b22;
+  --card-bg: #161b22;
+  --hover-bg: #30363d;
+  --accent-bg: #1f3a55;
+  --accent-text: #58a6ff;
 }
 
 [data-theme="dark"] body {
@@ -231,6 +241,34 @@ body.offcanvas-open {
 
 [data-theme="dark"] .border-gray-300 {
   border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .border-gray-400 {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .border {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .border-b {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .border-t {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .border-2 {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .border-dashed {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 [data-theme="dark"] .border-gray-100 {
@@ -304,69 +342,91 @@ body.offcanvas-open {
   background-color: var(--bg-tertiary) !important;
 }
 
+[data-theme="dark"] table thead th {
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
 [data-theme="dark"] table tbody tr {
   background-color: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] table tbody td {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] table {
+  border-color: var(--border-color) !important;
 }
 
 [data-theme="dark"] table tbody tr:hover {
   background-color: var(--hover-bg) !important;
 }
 
-/* Status Badges Dark Mode */
+[data-theme="dark"] .divide-y > * {
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .divide-gray-200 > * {
+  border-color: var(--border-color) !important;
+}
+
+/* Status Badges Dark Mode - GitHub Style */
 [data-theme="dark"] .bg-yellow-100 {
-  background-color: #44403c !important;
+  background-color: rgba(187, 128, 9, 0.15) !important;
 }
 
 [data-theme="dark"] .text-yellow-800 {
-  color: #fcd34d !important;
+  color: #d29922 !important;
 }
 
 [data-theme="dark"] .bg-green-100 {
-  background-color: #1c3d2e !important;
+  background-color: rgba(63, 185, 80, 0.15) !important;
 }
 
 [data-theme="dark"] .text-green-800 {
-  color: #6ee7b7 !important;
+  color: #3fb950 !important;
 }
 
 [data-theme="dark"] .bg-green-50 {
-  background-color: #1c3d2e !important;
+  background-color: rgba(63, 185, 80, 0.1) !important;
 }
 
 [data-theme="dark"] .text-green-600 {
-  color: #6ee7b7 !important;
+  color: #3fb950 !important;
 }
 
 [data-theme="dark"] .bg-orange-100 {
-  background-color: #44311d !important;
+  background-color: rgba(219, 109, 40, 0.15) !important;
 }
 
 [data-theme="dark"] .text-orange-800 {
-  color: #fdba74 !important;
+  color: #db6d28 !important;
 }
 
 [data-theme="dark"] .bg-red-100 {
-  background-color: #3d2020 !important;
+  background-color: rgba(248, 81, 73, 0.15) !important;
 }
 
 [data-theme="dark"] .text-red-800 {
-  color: #fca5a5 !important;
+  color: #f85149 !important;
 }
 
 [data-theme="dark"] .bg-red-50 {
-  background-color: #3d2020 !important;
+  background-color: rgba(248, 81, 73, 0.1) !important;
 }
 
 [data-theme="dark"] .text-red-600 {
-  color: #f87171 !important;
+  color: #f85149 !important;
 }
 
 [data-theme="dark"] .bg-purple-100 {
-  background-color: #2e1d44 !important;
+  background-color: rgba(163, 113, 247, 0.15) !important;
 }
 
 [data-theme="dark"] .text-purple-800 {
-  color: #c4b5fd !important;
+  color: #a371f7 !important;
 }
 
 /* Buttons Dark Mode */
@@ -443,15 +503,15 @@ body.offcanvas-open {
 }
 
 [data-theme="dark"] ::-webkit-scrollbar-track {
-  background: #252423;
+  background: #161b22;
 }
 
 [data-theme="dark"] ::-webkit-scrollbar-thumb {
-  background: #4a4a4a;
+  background: #30363d;
 }
 
 [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
-  background: #5a5a5a;
+  background: #484f58;
 }
 
 .dark-mode-toggle {
